@@ -25,12 +25,30 @@ function getObjects() {
     });
 }
 
-function pickRandomImg() {
+async function pickRandomImg() {
     if (bucketObjects.length) {
-        let index = Math.floor(Math.random() * bucketObjects.length);
-        const url = "https://griffinsphotos.s3.amazonaws.com/" + bucketObjects[index].Key;
+        try {
+            fetch("https://griffinsphotos.s3.amazonaws.com/metadata.json")
+                .then(response => {
+                    return response.json();
+                })
+                .then(json => {
 
-        document.getElementById("main-image").src = url;
+                    let index = Math.floor(Math.random() * bucketObjects.length);
+                    const url = "https://griffinsphotos.s3.amazonaws.com/" + bucketObjects[index].Key;
+
+                    document.getElementById("main-image").src = url;
+                    try {
+                        document.getElementById("title").innerHTML = json[bucketObjects[index].Key].title;
+                        document.getElementById("description").innerHTML = json[bucketObjects[index].Key].description;
+                    } catch (err) {
+                        console.log("Couldn't get info for this image...");
+                    }
+                });
+        } catch (err) {
+            console.log(err);
+        }
+
     }
 }
 
