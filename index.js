@@ -1,7 +1,4 @@
-console.log("HELLO FROM AMPLIFY");
-
 import { ACCESS_KEY_ID, SECRET_ACCESS_KEY } from "./config.js";
-
 
 AWS.config.update({
     accessKeyId: ACCESS_KEY_ID,
