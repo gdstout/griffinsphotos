@@ -1,6 +1,9 @@
+import {ACCESS_KEY_ID, SECRET_ACCESS_KEY} from "./config.js";
+
+
 AWS.config.update({
-    accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    accessKeyId: ACCESS_KEY_ID,
+    secretAccessKey: SECRET_ACCESS_KEY,
     region: 'us-east-1',
 });
 
