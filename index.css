@@ -28,8 +28,18 @@ body {
 	flex-direction: column;
 	height: 100%;
 	min-width: 220px;
+
 	@media (orientation: portrait) {
 		align-items: center;
+	}
+	
+	@media only screen and (max-device-width: 480px){
+		h2 {
+			font-size: 3em;
+		}
+		p {
+			font-size: 1.5em;
+		}
 	}
 }
 
@@ -37,7 +47,7 @@ img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	max-width: 40vw;
+	max-width: 42vw;
 	max-height: 80vh;
 	@media (orientation: portrait) {
 		max-width: 90vw;
