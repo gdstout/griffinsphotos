@@ -39,10 +39,9 @@ async function pickRandomImg() {
 
                     let img = new Image();
                     img.onload = async function() {
-                        alert("Img loaded...");
                         document.getElementById("content").appendChild(img);
                         await new Promise(r => setTimeout(r, 500));
-                        document.getElementById("content").hidden = false;
+                        document.getElementsByClassName("main").hidden = false;
                     }
                     img.className="main-image"
                     img.src = url;
