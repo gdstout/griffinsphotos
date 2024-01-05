@@ -11,6 +11,10 @@ body {
 }
 
 .content {
+  .hidden {
+    visibility: hidden;
+  }
+
   @media (orientation: landscape) {
     display: grid;
     grid-template-columns: 1fr 2fr;

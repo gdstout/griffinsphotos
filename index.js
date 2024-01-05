@@ -40,7 +40,7 @@ async function pickRandomImg() {
                     let img = new Image();
                     img.onload = function() {
                         document.getElementById("content").appendChild(img);
-                        //document.getElementById("content").removeAttribute("hidden");
+                        document.getElementById("content").className = "content";
                     }
                     img.className="main-image"
                     img.src = url;
