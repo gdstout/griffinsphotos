@@ -11,10 +11,6 @@ body {
 }
 
 .content {
-  .hidden {
-    visibility: hidden;
-  }
-
   @media (orientation: landscape) {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -24,6 +20,10 @@ body {
     display: grid;
     row-gap: 5%;
   }
+}
+
+.content-hidden {
+  visibility: hidden;
 }
 
 .text {
