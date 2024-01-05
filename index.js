@@ -43,6 +43,9 @@ async function pickRandomImg() {
                         document.getElementById("description").innerHTML = json[bucketObjects[index].Key].description;
                     } catch (err) {
                         console.log("Couldn't get info for this image...");
+                        document.getElementById("title").innerHTML = "Untitled";
+                        document.getElementById("description").innerHTML = "No information."
+
                     }
                 });
         } catch (err) {
