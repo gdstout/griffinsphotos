@@ -37,7 +37,13 @@ async function pickRandomImg() {
                     let index = Math.floor(Math.random() * bucketObjects.length);
                     const url = "https://griffinsphotos.s3.amazonaws.com/" + bucketObjects[index].Key;
 
-                    document.getElementById("main-image").src = url;
+                    let img = new Image();
+                    img.onload = function() {
+                        document.getElementById("content").appendChild(img);
+                        document.getElementById("content").hidden = false;
+                    }
+                    img.className="main-image"
+                    img.src = url;
                     try {
                         document.getElementById("title").innerHTML = json[bucketObjects[index].Key].title;
                         document.getElementById("description").innerHTML = json[bucketObjects[index].Key].description;

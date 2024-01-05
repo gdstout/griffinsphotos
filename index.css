@@ -1,58 +1,60 @@
 body {
-	margin: 0px;
+  margin: 0px;
 }
 
 .main {
-    	display: flex;
-    	justify-content: center;
-    	align-items: center;
-    	width: 100%;
-    	height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
 }
 
 .content {
-	@media (orientation: landscape) {
-		display: grid;
-		grid-template-columns: 1fr 2fr;
-		column-gap: 5%;
-	}
-	@media (orientation: portrait) {
-		display: grid;
-		row-gap: 5%;
-	}
+  @media (orientation: landscape) {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 5%;
+  }
+  @media (orientation: portrait) {
+    display: grid;
+    row-gap: 5%;
+  }
 }
 
 .text {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	height: 100%;
-	min-width: 250px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  min-width: 250px;
 
-	@media (orientation: portrait) {
-		align-items: center;
-	}
-	
-	@media only screen and (max-device-width: 480px){
-		h2 {
-			font-size: 3em;
-		}
-		p {
-			font-size: 1.5em;
-		}
-	}
+  @media (orientation: portrait) {
+    align-items: center;
+  }
+
+  @media only screen and (max-device-width: 480px) {
+    h2 {
+      font-size: 3em;
+    }
+    p {
+      font-size: 1.5em;
+    }
+  }
 }
 
-img {	
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	max-width: 46vw;
-	max-height: 80vh;
-	@media (orientation: portrait) {
-		max-width: 90vw;
-		max-height: 80vh;
-		order: -1
-	}
-	box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 46vw;
+  max-height: 80vh;
+  @media (orientation: portrait) {
+    max-width: 90vw;
+    max-height: 80vh;
+    order: -1;
+  }
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
