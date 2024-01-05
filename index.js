@@ -39,6 +39,7 @@ async function pickRandomImg() {
 
                     let img = new Image();
                     img.onload = function() {
+                        alert("Img loaded...");
                         document.getElementById("content").appendChild(img);
                         document.getElementById("content").hidden = false;
                     }
