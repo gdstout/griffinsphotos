@@ -38,9 +38,10 @@ async function pickRandomImg() {
                     const url = "https://griffinsphotos.s3.amazonaws.com/" + bucketObjects[index].Key;
 
                     let img = new Image();
-                    img.onload = function() {
+                    img.onload = async function() {
                         alert("Img loaded...");
                         document.getElementById("content").appendChild(img);
+                        await new Promise(r => setTimeout(r, 500));
                         document.getElementById("content").hidden = false;
                     }
                     img.className="main-image"
