@@ -7,7 +7,52 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: 95vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  border-bottom: 1px solid black;
+
+  .website-name {
+    padding: 8px;
+    border-right: 1px solid black;
+  }
+
+  .next {
+    padding: 8px;
+    cursor: pointer;
+  }
+  .next:hover {
+    background-color: rgb(242, 242, 242);
+    background-image: linear-gradient(to right, rgb(180, 180, 180) , white);
+  }
+  .swipe {
+    visibility: hidden;
+  }
+
+  @media only screen and (max-device-width: 480px) {
+    position: fixed;
+    bottom: 0;
+    height: 70px;
+    width: 100%;
+    border-top: 1px solid black;
+    .website-name {
+      padding: 12px;
+      font-size: 2.5rem;
+      border-right: 1px solid black;
+    }
+    .next {
+      display: none;
+    }
+    .swipe {
+      padding: 12px;
+      visibility: visible;
+      font-size: 1.5rem;
+    }
+  }
 }
 
 .content {
@@ -58,7 +103,7 @@ img {
     max-height: 80vh;
     order: -1;
   }
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; 
 }

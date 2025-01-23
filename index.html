@@ -6,12 +6,20 @@
   </head>
 
   <body>
+    <div class="header">
+      <div class="website-name" >
+        <strong>Griffin's Photos</strong>
+      </div>
+      <div class="next" onclick="goToNextImage()">Next Photo</div>
+      <div class="swipe">Swipe to see next photo.</div>
+    </div>
     <div class="main">
       <div id="content" class="content-hidden">
         <div class="text">
           <h2 id="title"></h2>
           <p id="description"></p>
         </div>
+        <img id="main-image" src="" alt="Main Photo" class="main-image"/>
       </div>
     </div>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1528.0.min.js"></script>
