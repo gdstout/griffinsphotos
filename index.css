@@ -1,5 +1,12 @@
+html, body {
+  overflow-x: hidden;
+}
+
 body {
+  position: relative;
   margin: 0px;
+  background-color: black;
+  color: white;
 }
 
 .main {
@@ -13,45 +20,85 @@ body {
 .header {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   height: 35px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid white;
+  background-color: black;
 
   .website-name {
     padding: 8px;
-    border-right: 1px solid black;
+    border-right: 1px solid white;
   }
 
   .next {
     padding: 8px;
-    cursor: pointer;
-  }
-  .next:hover {
-    background-color: rgb(242, 242, 242);
-    background-image: linear-gradient(to right, rgb(180, 180, 180) , white);
   }
   .swipe {
+    visibility:hidden;
+    width: 0;
+  }
+  .see-all-hidden {
     visibility: hidden;
+    width: 0px;
+  }
+  .see-all {
+    padding: 8px;
+    cursor: pointer;
+    border-left: 1px solid white;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
   }
 
-  @media only screen and (max-device-width: 480px) {
+  @media only screen and (max-device-width: 480px) and (orientation: portrait) {
     position: fixed;
     bottom: 0;
     height: 70px;
     width: 100%;
-    border-top: 1px solid black;
+    border-top: 1px solid white;
+    border-bottom: none;
+    justify-content: space-between;
     .website-name {
       padding: 12px;
       font-size: 2.5rem;
-      border-right: 1px solid black;
+      border-right: 1px solid white;
     }
     .next {
-      display: none;
+      visibility: hidden;
+      width: 0;
     }
     .swipe {
-      padding: 12px;
       visibility: visible;
+      width: auto;
+      padding: 12px;
       font-size: 1.5rem;
     }
+    .see-all {
+      padding: 12px;
+      font-size: 2.5rem;
+    }
+  }
+  @media only screen and (max-device-width: 480px) {
+    .next {
+      visibility: hidden;
+      width: 0;
+    }
+    .swipe {
+      visibility: visible;
+      width: auto;
+    }
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
@@ -63,7 +110,7 @@ body {
   }
   @media (orientation: portrait) {
     display: grid;
-    row-gap: 5%;
+    row-gap: 1%;
   }
 }
 
@@ -82,7 +129,7 @@ body {
     align-items: center;
   }
 
-  @media only screen and (max-device-width: 480px) {
+  @media only screen and (max-device-width: 480px) and (orientation: portrait) {
     h2 {
       font-size: 3em;
     }
@@ -103,7 +150,9 @@ img {
     max-height: 80vh;
     order: -1;
   }
-   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; 
+  padding: 4px;
+  border: 1px solid white;
+  @media only screen and (max-device-width: 480px) {
+    padding: 8px;
+  }
 }

@@ -10,10 +10,20 @@ const s3 = new AWS.S3();
 
 const bucketName = "griffinsphotos";
 
+/**
+ * variables to store image and s3 bucket data
+ */
 let bucketObjects = [];
 let metadata = {};
+
+/**
+ * variables to handle the randomness and switching to/loading the next image
+ */
 let scrambledArray = [];
-let currentIndex = -1;
+let firstLoad = true;
+let index = 0;
+let nextImage = new Image();
+let canSeeAll = false;
 
 /**
  * Gets a list of the objects in the bucket and stores them in the bucketObjects array.
@@ -27,7 +37,7 @@ function performSetup() {
       if (err) {
         console.error("Error listing objects: ", err);
       } else {
-        bucketObjects = data.Contents;
+        bucketObjects = data.Contents.filter((obj) => obj.Key !== "metadata.json");
         scrambledArray = createScrambledArray(bucketObjects.length);
 
         fetch("https://griffinsphotos.s3.amazonaws.com/metadata.json")
@@ -70,35 +80,58 @@ function createScrambledArray(X) {
 export async function goToNextImage() {
   document.getElementById("content").className = "content-hidden";
 
-  if (currentIndex < bucketObjects.length) {
-    currentIndex ++;
-  } else {
-    currentIndex = 0;
-  }
-
-  const url =
-    "https://griffinsphotos.s3.amazonaws.com/" +
-    bucketObjects[scrambledArray[currentIndex]].Key;
-
   let img = document.getElementById("main-image");
-  img.src = url;
+
+  if (firstLoad) {
+    firstLoad = false;
+    const url =
+      "https://griffinsphotos.s3.amazonaws.com/" +
+      bucketObjects[scrambledArray[index]].Key;
+    img.src = url;
+  } else {
+    img.src = nextImage.src;
+  }
   img.onload = function () {
     document.getElementById("content").className = "content";
-  }
-
+  };
 
   try {
     document.getElementById("title").innerHTML =
-      metadata[bucketObjects[scrambledArray[currentIndex]].Key].title;
+      metadata[bucketObjects[scrambledArray[index]].Key].title;
     document.getElementById("description").innerHTML =
-      metadata[bucketObjects[scrambledArray[currentIndex]].Key].description;
+      metadata[bucketObjects[scrambledArray[index]].Key].description;
   } catch (err) {
     console.error("Couldn't find metadata for this image...");
     document.getElementById("title").innerHTML = "Untitled";
     document.getElementById("description").innerHTML = "No information.";
   }
+
+  if (index < bucketObjects.length - 1) {
+    index++;
+  } else {
+    index = 0;
+  }
+
+  loadNextImage(index);
 }
 window.goToNextImage = goToNextImage;
+
+function loadNextImage(i /* index of next image to load */) {
+  const url =
+    "https://griffinsphotos.s3.amazonaws.com/" +
+    bucketObjects[scrambledArray[i]].Key;
+  nextImage.src = url;
+}
+
+/**
+ * Detect a click anywhere on the screen and go to the next picture;
+ */
+document.addEventListener("click", (e) => {
+  if (/Mobi/i.test(navigator.userAgent)) {
+    return; 
+  }
+  goToNextImage();  
+});
 
 /**
  * This section defines variables and functions to determine if a mobile
@@ -111,11 +144,11 @@ let touchDuration = null;
 
 function checkDirection() {
   if (touchDuration <= 300) {
-    if (touchEndX < touchStartX) {
-      pickRandomImg();
+    if (touchEndX < touchStartX - 100) {
+      goToNextImage();
     }
-    if (touchEndX > touchStartX) {
-      pickRandomImg();
+    if (touchEndX > touchStartX + 100) {
+      goToNextImage();
     }
   }
 }
@@ -130,7 +163,6 @@ document.addEventListener("touchend", (e) => {
   touchEndX = e.changedTouches[0].screenX;
   checkDirection();
 });
-
 
 /**
  * Initiate the first load of data
