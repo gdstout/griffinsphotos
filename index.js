@@ -37,7 +37,9 @@ function performSetup() {
       if (err) {
         console.error("Error listing objects: ", err);
       } else {
-        bucketObjects = data.Contents.filter((obj) => obj.Key !== "metadata.json");
+        bucketObjects = data.Contents.filter(
+          (obj) => obj.Key !== "metadata.json"
+        );
         scrambledArray = createScrambledArray(bucketObjects.length);
 
         fetch("https://griffinsphotos.s3.amazonaws.com/metadata.json")
@@ -128,9 +130,9 @@ function loadNextImage(i /* index of next image to load */) {
  */
 document.addEventListener("click", (e) => {
   if (/Mobi/i.test(navigator.userAgent)) {
-    return; 
+    return;
   }
-  goToNextImage();  
+  goToNextImage();
 });
 
 /**

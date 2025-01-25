@@ -35,7 +35,7 @@ body {
   }
   .swipe {
     visibility:hidden;
-    width: 0;
+    width: 0px;
   }
   .see-all-hidden {
     visibility: hidden;
@@ -124,6 +124,7 @@ body {
   flex-direction: column;
   height: 100%;
   min-width: 250px;
+  max-width: 400px;
 
   @media (orientation: portrait) {
     align-items: center;
