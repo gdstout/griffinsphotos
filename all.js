@@ -22,7 +22,7 @@ let scrambledArray = [];
  * gets the bucket data and then appends all of the images
  */
 function grabAll() {
-    console.log("grabbin")
+  console.log("grabbin");
   const params = { Bucket: bucketName };
 
   s3.listObjects(params, function (err, data) {
@@ -38,8 +38,9 @@ function grabAll() {
       let wrapper;
       let content = document.getElementById("content");
       scrambledArray.forEach((randIndex, i) => {
-        wrapper = document.createElement("div")
-        wrapper.id = bucketObjects[randIndex].Key; + '-wrapper'
+        wrapper = document.createElement("div");
+        wrapper.id = bucketObjects[randIndex].Key;
+        +"-wrapper";
         wrapper.className = "img-wrapper";
 
         img = new Image();
@@ -49,14 +50,14 @@ function grabAll() {
         img.src =
           "https://griffinsphotos.s3.amazonaws.com/" +
           bucketObjects[randIndex].Key;
-        
-        if(i === 2) {
-            // wrapper.className = "img-wrapper long" // for pano (future)
-            console.log(bucketObjects[randIndex].Key)
-            img.onload = function() {
-                document.getElementById("content").className = "content";
-                document.getElementById("loading").className = "not-loading";
-            }
+
+        if (i === 2) {
+          // wrapper.className = "img-wrapper long" // for pano (future)
+          console.log(bucketObjects[randIndex].Key);
+          img.onload = function () {
+            document.getElementById("content").className = "content";
+            document.getElementById("loading").className = "not-loading";
+          };
         }
 
         wrapper.appendChild(img);
