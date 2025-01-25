@@ -64,6 +64,7 @@ body {
       border-right: 1px solid white;
     }
     .next {
+      display: none;
       visibility: hidden;
       width: 0;
     }
