@@ -110,7 +110,9 @@ body {
     column-gap: 5%;
   }
   @media (orientation: portrait) {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     row-gap: 1%;
   }
 }
@@ -121,14 +123,15 @@ body {
 
 .text {
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
   height: 100%;
   min-width: 250px;
   max-width: 400px;
 
   @media (orientation: portrait) {
-    align-items: center;
+    max-width: 90%;
+    text-align: center;
   }
 
   @media only screen and (max-device-width: 480px) and (orientation: portrait) {

@@ -46,11 +46,11 @@ body {
 }
 
 .loading {
-    align-self: center;
+  align-self: center;
 }
 
 .not-loading {
-    display: none;
+  display: none;
 }
 
 .content-hidden {
@@ -59,20 +59,17 @@ body {
 }
 
 .content {
-    visibility: visible;
+  visibility: visible;
+  display: grid;
+  padding-top: 5vh;
+  gap: 12px;
   @media (orientation: landscape) {
-    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
     max-width: 85vw;
-    padding-top: 5vh;
   }
   @media (orientation: portrait) {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 90vw;
-    gap: 12px;
-    padding-top: 5vh;
+    width: 95vw;
   }
 }
 
@@ -89,11 +86,11 @@ body {
   }
 }
 
+.long {
+    grid-column: span 2;
+  }
+
 .img {
   max-width: 100%;
   max-height: 100%;
-}
-
-.long {
-    grid-column: span 2;
 }
