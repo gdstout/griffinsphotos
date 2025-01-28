@@ -95,7 +95,11 @@ function createScrambledArray(X) {
   return array;
 }
 
-export async function goToNextImage() {
+/**
+ * set image url to nextImage url, load next image
+ * if it's the first load, just set main image url directly
+ */
+function goToNextImage() {
   document.getElementById("content").className = "content-hidden";
 
   let img = document.getElementById("main-image");
@@ -113,16 +117,7 @@ export async function goToNextImage() {
     document.getElementById("content").className = "content";
   };
 
-  try {
-    document.getElementById("title").innerHTML =
-      metadata[bucketObjects[scrambledArray[index]].Key].title;
-    document.getElementById("description").innerHTML =
-      metadata[bucketObjects[scrambledArray[index]].Key].description;
-  } catch (err) {
-    console.error("Couldn't find metadata for this image...");
-    document.getElementById("title").innerHTML = "Untitled";
-    document.getElementById("description").innerHTML = "No information.";
-  }
+  applyMetadata(index);
 
   if (index < bucketObjects.length - 1) {
     index++;
@@ -132,13 +127,61 @@ export async function goToNextImage() {
 
   loadNextImage(index);
 }
-window.goToNextImage = goToNextImage;
 
 function loadNextImage(i /* index of next image to load */) {
   const url =
     "https://griffinsphotos.s3.amazonaws.com/" +
     bucketObjects[scrambledArray[i]].Key;
   nextImage.src = url;
+}
+
+function goToPreviousImage() {
+  document.getElementById("content").className = "content-hidden";
+
+  let img = document.getElementById("main-image");
+  let prevIndex;
+
+  // go backwards by 2 because index is incremented to the next image already
+  if (index === 1) {
+    prevIndex = bucketObjects.length - 1;
+  } else if(index === 0){
+    prevIndex = bucketObjects.length - 2;
+  } else {
+    prevIndex = index - 2;
+  }
+
+  const url =
+    "https://griffinsphotos.s3.amazonaws.com/" +
+    bucketObjects[scrambledArray[prevIndex]].Key;
+  img.src = url;
+
+  img.onload = function () {
+    document.getElementById("content").className = "content";
+  };
+
+  applyMetadata(prevIndex);
+
+  // decrement the "next" index by 1, then "load" the new image
+  // it should already be cached
+  if (index === 0) {
+    index = bucketObjects.length - 1;
+  } else {
+    index --;
+  }
+  loadNextImage(index);
+}
+
+function applyMetadata(ok) {
+  try {
+    document.getElementById("title").innerHTML =
+      metadata[bucketObjects[scrambledArray[ok]].Key].title;
+    document.getElementById("description").innerHTML =
+      metadata[bucketObjects[scrambledArray[ok]].Key].description;
+  } catch (err) {
+    console.error("Couldn't find metadata for this image...");
+    document.getElementById("title").innerHTML = "Untitled";
+    document.getElementById("description").innerHTML = "No information.";
+  }
 }
 
 /**
@@ -148,7 +191,9 @@ document.addEventListener("click", (e) => {
   if (/Mobi/i.test(navigator.userAgent)) {
     return;
   }
-  goToNextImage();
+  if (e.target.id !== "see-all") {
+    goToNextImage();
+  }
 });
 
 /**
@@ -163,10 +208,12 @@ let touchDuration = null;
 function checkDirection() {
   if (touchDuration <= 300) {
     if (touchEndX < touchStartX - 100) {
+      // swipe to the left
       goToNextImage();
     }
     if (touchEndX > touchStartX + 100) {
-      goToNextImage();
+      // swipe to the right (go back)
+      goToPreviousImage();
     }
   }
 }
