@@ -28,18 +28,18 @@ body {
   .website-name {
     padding: 8px;
     border-right: 1px solid white;
+    min-width: 109px;
   }
-
   .next {
     padding: 8px;
   }
+
   .swipe {
     visibility:hidden;
     width: 0px;
   }
   .see-all-hidden {
-    visibility: hidden;
-    width: 0px;
+    display: none;
   }
   .see-all {
     padding: 8px;
@@ -48,6 +48,7 @@ body {
     background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     background-size: 400% 400%;
     animation: gradient 5s ease infinite;
+    min-width: 48px;
   }
 
   @media only screen and (max-device-width: 480px) and (orientation: portrait) {

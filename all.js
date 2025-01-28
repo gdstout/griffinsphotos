@@ -50,10 +50,10 @@ function grabAll() {
         img.src =
           "https://griffinsphotos.s3.amazonaws.com/" +
           bucketObjects[randIndex].Key;
+        img.onclick= () => window.location.href = `/?img=${bucketObjects[randIndex].Key}`
 
         if (i === 2) {
           // wrapper.className = "img-wrapper long" // for pano (future)
-          console.log(bucketObjects[randIndex].Key);
           img.onload = function () {
             document.getElementById("content").className = "content";
             document.getElementById("loading").className = "not-loading";

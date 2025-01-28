@@ -23,17 +23,22 @@ let scrambledArray = [];
 let firstLoad = true;
 let index = 0;
 let nextImage = new Image();
-let canSeeAll = false;
 
 /**
  * Gets a list of the objects in the bucket and stores them in the bucketObjects array.
  * Fetches the metadata.json file and stores it in the metadata object.
  */
 function performSetup() {
-  const params = { Bucket: bucketName };
+  const awsParams = { Bucket: bucketName };
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const params = {};
+  for (const [key, value] of queryParams.entries()) {
+    params[key] = value;
+  }
 
   try {
-    s3.listObjects(params, function (err, data) {
+    s3.listObjects(awsParams, function (err, data) {
       if (err) {
         console.error("Error listing objects: ", err);
       } else {
@@ -51,6 +56,17 @@ function performSetup() {
           })
           .then((data) => {
             metadata = data;
+            if (params.img) {
+              // if the query params have an image that matches, find that index and set it to be first
+              const bucketIndex = bucketObjects.findIndex(
+                (obj) => obj.Key === params.img
+              );
+              if (bucketIndex > -1) {
+                index = scrambledArray.findIndex((num) => num === bucketIndex);
+              } else {
+                alert(`The image '${params.img}' could not be found!`);
+              }
+            }
             goToNextImage();
           })
           .catch((error) => {
