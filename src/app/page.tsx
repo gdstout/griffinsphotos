@@ -2,6 +2,8 @@ import Image from "next/image";
 import { getImageUrl, getMetadata } from "../lib/api";
 import { ImageMetadata } from "../lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const metadata: ImageMetadata[] = await getMetadata();
   const imageUrl: string = await getImageUrl("lookout.JPEG");

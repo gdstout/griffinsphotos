@@ -15,7 +15,9 @@ export async function getMetadata(): Promise<ImageMetadata[]> {
 }
 
 export async function getImageUrl(filename: string): Promise<string> {
-  const response = await api.get<ImageUrlResponse>(`/image?img=${filename}`);
+  const response = await api.get<ImageUrlResponse>(
+    `/image?img=${encodeURIComponent(filename)}`,
+  );
 
   return response.data.url;
 }
