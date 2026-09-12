@@ -22,7 +22,7 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching metadata from S3: ", error);
     return NextResponse.json(
-      { error: "Error fetching metadata!" },
+      { error: `Error fetching metadata! ${error}` },
       { status: 500 },
     );
   }

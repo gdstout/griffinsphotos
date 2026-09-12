@@ -5,12 +5,21 @@ import { ImageMetadata } from "../lib/types";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const metadata: ImageMetadata[] = await getMetadata();
-  const imageUrl: string = await getImageUrl("lookout.JPEG");
+  let imageUrl = "";
+  try {
+    const metadata: ImageMetadata[] = await getMetadata();
+    imageUrl = await getImageUrl("lookout.JPEG");
+  } catch (error) {
+    console.log("Error fetching data:", error);
+  }
 
-  return (
-    <div>
-      <Image alt="Hello, world!" src={imageUrl} fill={true} />
-    </div>
-  );
+  if (imageUrl !== "") {
+    return (
+      <div>
+        <Image alt="Hello, world!" src={imageUrl} fill={true} />
+      </div>
+    );
+  } else {
+    return <div>Error</div>;
+  }
 }
