@@ -1,3 +1,4 @@
-config.js
-metadata.json
-/photos
+node_modules
+.next
+.env
+tsconfig.tsbuildinfo
