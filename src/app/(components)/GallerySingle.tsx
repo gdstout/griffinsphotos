@@ -23,6 +23,7 @@ export default function GallerySingle({
   const [showNavigation, setShowNavigation] = useState(true);
   const prefetchedImages = useRef(new Map<number, Promise<string>>());
 
+  // state used for keeping track of auto advance
   const autoAdvanceTimer = useRef<number | null>(null);
   const stationaryTimer = useRef<number | null>(null);
   const autoAdvanceGeneration = useRef(0);
@@ -123,10 +124,17 @@ export default function GallerySingle({
     indicatorRef.current?.classList.remove("advance-indicator-active");
   }
 
+  /**
+   * handle scheduling and resetting of timers for auto advance using window.setTimeout()
+   */
   function scheduleAutoAdvance() {
     clearAutoAdvanceTimer();
 
-    if (mouseX.current === null || mouseX.current <= window.innerWidth / 2) {
+    if (
+      window.matchMedia("(pointer: coarse)").matches ||
+      mouseX.current === null ||
+      mouseX.current <= window.innerWidth / 2
+    ) {
       return;
     }
 
@@ -167,10 +175,17 @@ export default function GallerySingle({
   }
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    // prevent mobile devices from triggering a timer
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      clearAutoAdvanceTimer();
+      return;
+    }
+
     mouseX.current = e.clientX;
     galleryRef.current?.style.setProperty("--mouse-x", `${e.clientX}px`);
     galleryRef.current?.style.setProperty("--mouse-y", `${e.clientY}px`);
 
+    // change the cursor if we are on the right side of the screen
     if (e.clientX > window.innerWidth / 2) {
       galleryRef.current?.classList.add("gallery-cursor-hidden");
       indicatorRef.current?.classList.add("custom-cursor-visible");

@@ -4,7 +4,7 @@ import GallerySingle from "./(components)/GallerySingle";
 
 export const dynamic = "force-dynamic";
 
-function shuffle<T>(array: T[]) {
+export function shuffle<T>(array: T[]) {
   let currentIndex = array.length;
   let randomIndex: number;
 
