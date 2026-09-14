@@ -59,13 +59,20 @@ export default function GallerySingle({
       onClick={showNextImage}
       className="flex min-h-screen items-center justify-center "
     >
-      <div className="relative h-[75vh] w-[60vw] flex items-center justify-center">
-        <div>
-          <p>{metadata[currentIndex].title}</p>
+      <div
+        className="relative max-w-[75vw] grid grid-cols-5 items-center justify-center gap-8 p-8 
+          [@media(max-aspect-ratio:3/4)]:grid-cols-1
+          [@media(max-aspect-ratio:3/4)]:max-w-[95vw]
+          [@media(max-aspect-ratio:3/4)]:p-0"
+      >
+        <div className="[@media(max-aspect-ratio:3/4)]:order-2 [@media(max-aspect-ratio:3/4)]:text-center">
+          <h2 className="font-bold text-xl">{metadata[currentIndex].title}</h2>
+          <p className="text-s">{metadata[currentIndex].description}</p>
         </div>
         <img
           alt="img"
-          className="h-auto max-h-full w-auto max-w-full border border-taupe-300 p-1.5 object-contain"
+          className="order-1 col-span-4 h-auto max-h-[80vh] w-auto max-w-full border border-taupe-300 p-1.5 object-contain 
+            [@media(max-aspect-ratio:3/4)]:col-span-1"
           src={currentImgUrl}
         />
       </div>
