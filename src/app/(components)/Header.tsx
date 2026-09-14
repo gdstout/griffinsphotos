@@ -7,7 +7,7 @@ export default function Header() {
 
   return (
     <div className="flex border-b border-b-taupe-300 border-dotted">
-      <div className="px-4 py-1 font-bold border-r border-b-taupe-300 border-dotted">
+      <div className="px-4 py-1 font-bold border-r border-b-taupe-300 border-dotted [@media(max-aspect-ratio:3/4)]:text-s">
         Griffin Stout Photography
       </div>
       {/* <div className="px-4 py-1 italic border-r border-b-taupe-300 border-dotted">

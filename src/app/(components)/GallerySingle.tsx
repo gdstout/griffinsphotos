@@ -63,11 +63,19 @@ export default function GallerySingle({
         className="relative max-w-[75vw] grid grid-cols-5 items-center justify-center gap-8 p-8 
           [@media(max-aspect-ratio:3/4)]:grid-cols-1
           [@media(max-aspect-ratio:3/4)]:max-w-[95vw]
-          [@media(max-aspect-ratio:3/4)]:p-0"
+          [@media(max-aspect-ratio:3/4)]:p-0
+          [@media(max-aspect-ratio:3/4)]:justify-end"
       >
         <div className="[@media(max-aspect-ratio:3/4)]:order-2 [@media(max-aspect-ratio:3/4)]:text-center">
-          <h2 className="font-bold text-xl">{metadata[currentIndex].title}</h2>
-          <p className="text-s">{metadata[currentIndex].description}</p>
+          <h2
+            className="font-bold text-xl
+            [@media(max-aspect-ratio:3/4)]:text-lg"
+          >
+            {metadata[currentIndex].title}
+          </h2>
+          <p className="text-s [@media(max-aspect-ratio:3/4)]:text-xs">
+            {metadata[currentIndex].description}
+          </p>
         </div>
         <img
           alt="img"
