@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1. Critical for AWS Amplify SSR deployments
+  // Critical for AWS Amplify SSR
   output: "standalone",
 
   images: {
