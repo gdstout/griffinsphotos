@@ -102,6 +102,10 @@ export default function GallerySingle({
     }
   }
 
+  /**
+   * reset timers for auto advance
+   * removes css class that depicts a circular loader
+   */
   function clearAutoAdvanceTimer() {
     autoAdvanceGeneration.current += 1;
 
@@ -203,7 +207,8 @@ export default function GallerySingle({
       <div
         className={`absolute inset-0 z-10 grid h-full w-full grid-cols-2 text-8xl transition-opacity duration-3000 ${
           showNavigation ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        }
+          [@media(max-aspect-ratio:3/4)]:text-5xl`}
       >
         <div className="bg-mauve-800/90 flex items-center justify-center">
           previous
