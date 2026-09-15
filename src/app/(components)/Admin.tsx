@@ -12,6 +12,7 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
   const [images, setImages] = useState(metadataEnriched);
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const [selectedFilename, setSelectedFilename] = useState<string | null>(null);
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const selectedImage = images.find(
     (image) => image.filename === selectedFilename,
   );
@@ -46,10 +47,11 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
       current.filter((image) => image.filename !== selectedImage.filename),
     );
     setSelectedFilename(null);
+    setIsConfirmingDelete(false);
   }
 
   return (
-    <div className="m-4 grid grid-flow-row-dense grid-cols-2 gap-4 lg:mx-auto lg:max-w-[65vw] [@media(max-aspect-ratio:3/4)]:m-1 [@media(max-aspect-ratio:3/4)]:gap-1">
+    <div className="m-4 grid grid-flow-row-dense grid-cols-2 gap-4 lg:mx-auto lg:max-w-[65vw] [@media(max-aspect-ratio:3/4)]:m-1 [@media(max-aspect-ratio:3/4)]:grid-cols-1 [@media(max-aspect-ratio:3/4)]:gap-1">
       {images.map((img) => {
         return (
           <div
@@ -73,13 +75,16 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
             <button
               type="button"
               aria-label={`Edit ${img.filename}`}
-              onClick={() => setSelectedFilename(img.filename)}
+              onClick={() => {
+                setSelectedFilename(img.filename);
+                setIsConfirmingDelete(false);
+              }}
               className="absolute inset-0 cursor-pointer"
             />
             {selectedFilename === img.filename && (
               <form
                 onSubmit={saveImage}
-                className="absolute inset-0 z-10 flex flex-col justify-center gap-3 bg-taupe-950/5 p-4"
+                className="absolute inset-0 isolate z-10 flex flex-col justify-center gap-3 bg-taupe-950/5 p-4"
               >
                 <label className="flex flex-col gap-1 text-sm">
                   Title
@@ -107,7 +112,7 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
                   </button>
                   <button
                     type="button"
-                    onClick={deleteImage}
+                    onClick={() => setIsConfirmingDelete(true)}
                     className="border border-red-500 px-3 py-1 text-red-500 transition hover:bg-red-500 hover:text-taupe-950"
                   >
                     Delete
@@ -120,6 +125,31 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
                     Cancel
                   </button>
                 </div>
+                {isConfirmingDelete && (
+                  <div
+                    role="alertdialog"
+                    aria-label="Confirm image deletion"
+                    className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-taupe-950/90 p-4 text-center"
+                  >
+                    <p>Are you sure about that?</p>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={deleteImage}
+                        className="border border-red-500 px-3 py-1 text-red-500 transition hover:bg-red-500 hover:text-taupe-950"
+                      >
+                        Confirm Delete
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsConfirmingDelete(false)}
+                        className="border border-taupe-300 px-3 py-1 transition hover:bg-taupe-300 hover:text-taupe-950"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </form>
             )}
           </div>
