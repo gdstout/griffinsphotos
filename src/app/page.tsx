@@ -25,5 +25,9 @@ export default async function Home() {
 
   const firstImg = await getImageUrl(metadata[0].filename);
 
-  return <GallerySingle metadata={metadata} imgUrl={firstImg} />;
+  return (
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <GallerySingle metadata={metadata} imgUrl={firstImg} />
+    </div>
+  );
 }

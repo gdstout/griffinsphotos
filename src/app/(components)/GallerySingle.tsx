@@ -214,34 +214,23 @@ export default function GallerySingle({
       <div
         ref={indicatorRef}
         aria-hidden="true"
-        className={`advance-indicator pointer-events-none fixed left-(--mouse-x) top-(--mouse-y) z-999 h-6 w-6 translate-x-[-50%] translate-y-[-40%] rounded-full border-2 border-taupe-300 opacity-0 ${
-          showAdvanceIndicator ? "advance-indicator-active" : ""
-        }`}
+        className={`advance-indicator pointer-events-none fixed top-(--mouse-y) left-(--mouse-x) z-999 h-6 w-6 translate-x-[-50%] translate-y-[-40%] rounded-full border-2 border-taupe-300 opacity-0 ${showAdvanceIndicator ? "advance-indicator-active" : ""}`}
       />
       {/* set of divs to show how the naviation works, disappear after 3 seconds */}
       <div
-        className={`absolute inset-0 z-10 grid h-full w-full grid-cols-2 text-8xl transition-opacity duration-3000 ${
-          showNavigation ? "opacity-100" : "pointer-events-none opacity-0"
-        }
-          [@media(max-aspect-ratio:3/4)]:text-5xl`}
+        className={`absolute inset-0 z-10 grid h-full w-full grid-cols-2 text-8xl transition-opacity duration-3000 ${showNavigation ? "opacity-100" : "pointer-events-none opacity-0"} [@media(max-aspect-ratio:3/4)]:text-5xl`}
       >
-        <div className="bg-mauve-800/90 flex items-center justify-center">
+        <div className="flex items-center justify-center bg-mauve-800/90">
           previous
         </div>
-        <div className="bg-slate-900/90 flex items-center justify-center">
+        <div className="flex items-center justify-center bg-slate-900/90">
           next
         </div>
       </div>
-      <div
-        className="m-8 
-          [@media(max-aspect-ratio:3/4)]:max-w-[95vw]
-          [@media(max-aspect-ratio:3/4)]:m-0"
-      >
+      <div className="m-8 [@media(max-aspect-ratio:3/4)]:m-0 [@media(max-aspect-ratio:3/4)]:max-w-[95vw]">
         <img
           alt="img"
-          className={`h-auto max-h-[80vh] w-auto max-w-full justify-self-end border border-taupe-300 p-1.5 object-contain 
-            ${loadedImageUrl === currentImgUrl ? "opacity-100" : "opacity-0"}
-            [@media(max-aspect-ratio:3/4)]:col-span-1`}
+          className={`h-auto max-h-[80vh] w-auto max-w-full justify-self-end border border-taupe-300 object-contain p-1.5 ${loadedImageUrl === currentImgUrl ? "opacity-100" : "opacity-0"} [@media(max-aspect-ratio:3/4)]:col-span-1`}
           src={currentImgUrl}
           onLoad={() => setLoadedImageUrl(currentImgUrl)}
         />

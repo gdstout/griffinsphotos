@@ -4,6 +4,10 @@ export interface ImageMetadata {
   description: string;
 }
 
+export interface ImageMetadataEnriched extends ImageMetadata {
+  urlInfo: ImageUrlResponse;
+}
+
 export interface ImageUrlResponse {
   url: string;
   expiresIn: number;

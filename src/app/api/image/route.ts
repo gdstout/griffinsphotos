@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   try {
     const command = new GetObjectCommand({
       Bucket: process.env.AWS_BUCKET_NAME,
-      Key: fileName,
+      Key: `images/${fileName}`,
     });
     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
 

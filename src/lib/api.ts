@@ -1,5 +1,9 @@
 import axios from "axios";
-import { ImageMetadata, ImageUrlResponse } from "./types";
+import {
+  ImageMetadata,
+  ImageMetadataEnriched,
+  ImageUrlResponse,
+} from "./types";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -28,4 +32,17 @@ export async function getImageUrl(filename: string): Promise<string> {
   );
 
   return response.data.url;
+}
+
+/**
+ *
+ */
+export async function enrichMetadata(
+  metadata: ImageMetadata[],
+): Promise<ImageMetadataEnriched[]> {
+  const response = await api.post<ImageMetadataEnriched[]>(`/all-image-urls`, {
+    metadata,
+  });
+
+  return response.data;
 }
