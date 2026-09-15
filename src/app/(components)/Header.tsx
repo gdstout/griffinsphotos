@@ -12,7 +12,8 @@ export default function Header() {
         href="/"
         className={`border-r ${pathname.includes("all") && "border-none"} [@media(max-aspect-ratio:3/4)]:text-s border-dotted border-b-taupe-300 px-4 py-1 font-bold transition duration-1000 hover:bg-taupe-300 hover:text-taupe-950 hover:duration-150`}
       >
-        Griffin Stout Photography
+        Griffin Stout Photography{" "}
+        {pathname.includes("admin") || (pathname.includes("login") && "Admin")}
       </Link>
       {!pathname.includes("all") && (
         <Link

@@ -218,6 +218,7 @@ export default function GallerySingle({
         aria-hidden="true"
         className={`advance-indicator pointer-events-none fixed top-(--mouse-y) left-(--mouse-x) z-999 h-6 w-6 translate-x-[-50%] translate-y-[-40%] rounded-full border-2 border-taupe-300 opacity-0 ${showAdvanceIndicator ? "advance-indicator-active" : ""}`}
       />
+
       {/* set of divs to show how the navigation works, disappear after 3 seconds */}
       {queryParamImage !== true && (
         <div
