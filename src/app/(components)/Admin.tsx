@@ -79,14 +79,14 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
             {selectedFilename === img.filename && (
               <form
                 onSubmit={saveImage}
-                className="absolute inset-0 z-10 flex flex-col justify-center gap-3 bg-taupe-950/85 p-4"
+                className="absolute inset-0 z-10 flex flex-col justify-center gap-3 bg-taupe-950/5 p-4"
               >
                 <label className="flex flex-col gap-1 text-sm">
                   Title
                   <input
                     name="title"
                     defaultValue={img.title}
-                    className="border border-taupe-300 bg-taupe-950/70 px-2 py-1 outline-none focus:border-taupe-100"
+                    className="border border-taupe-300 bg-taupe-950/20 px-2 py-1 outline-none focus:border-taupe-100"
                   />
                 </label>
                 <label className="flex flex-col gap-1 text-sm">
@@ -95,7 +95,7 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
                     name="description"
                     defaultValue={img.description}
                     rows={3}
-                    className="resize-none border border-taupe-300 bg-taupe-950/70 px-2 py-1 outline-none focus:border-taupe-100"
+                    className="resize-none border border-taupe-300 bg-taupe-950/20 px-2 py-1 outline-none focus:border-taupe-100"
                   />
                 </label>
                 <div className="flex gap-2">
@@ -108,7 +108,7 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
                   <button
                     type="button"
                     onClick={deleteImage}
-                    className="border border-red-300 px-3 py-1 text-red-300 transition hover:bg-red-300 hover:text-taupe-950"
+                    className="border border-red-500 px-3 py-1 text-red-500 transition hover:bg-red-500 hover:text-taupe-950"
                   >
                     Delete
                   </button>
