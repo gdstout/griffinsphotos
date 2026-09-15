@@ -242,7 +242,7 @@ export default function GallerySingle({
       <div className="m-8 [@media(max-aspect-ratio:3/4)]:m-0 [@media(max-aspect-ratio:3/4)]:max-w-[95vw]">
         <img
           alt="img"
-          className={`h-auto max-h-[80vh] w-auto max-w-full justify-self-end border border-taupe-300 object-contain p-1.5 ${loadedImageUrl === currentImgUrl ? "opacity-100" : "opacity-0"} [@media(max-aspect-ratio:3/4)]:col-span-1`}
+          className={`h-auto max-h-[80vh] w-auto max-w-full justify-self-end border border-taupe-300 object-contain p-1.5 [@media(max-aspect-ratio:3/4)]:p-1 ${loadedImageUrl === currentImgUrl ? "opacity-100" : "opacity-0"} [@media(max-aspect-ratio:3/4)]:col-span-1`}
           src={currentImgUrl}
           onLoad={() => setLoadedImageUrl(currentImgUrl)}
         />
