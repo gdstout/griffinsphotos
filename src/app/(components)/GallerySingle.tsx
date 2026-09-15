@@ -11,11 +11,13 @@ const AUTO_ADVANCE_DELAY_MS = 7500;
 interface GallerySingleProps {
   metadata: ImageMetadata[];
   imgUrl: string;
+  queryParamImage?: boolean;
 }
 
 export default function GallerySingle({
   metadata,
   imgUrl,
+  queryParamImage,
 }: GallerySingleProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentImgUrl, setCurrentImgUrl] = useState(imgUrl);
@@ -216,17 +218,27 @@ export default function GallerySingle({
         aria-hidden="true"
         className={`advance-indicator pointer-events-none fixed top-(--mouse-y) left-(--mouse-x) z-999 h-6 w-6 translate-x-[-50%] translate-y-[-40%] rounded-full border-2 border-taupe-300 opacity-0 ${showAdvanceIndicator ? "advance-indicator-active" : ""}`}
       />
-      {/* set of divs to show how the naviation works, disappear after 3 seconds */}
-      <div
-        className={`absolute inset-0 z-10 grid h-full w-full grid-cols-2 text-8xl transition-opacity duration-3000 ${showNavigation ? "opacity-100" : "pointer-events-none opacity-0"} [@media(max-aspect-ratio:3/4)]:text-5xl`}
-      >
-        <div className="flex items-center justify-center bg-mauve-800/90">
-          previous
+      {/* set of divs to show how the navigation works, disappear after 3 seconds */}
+      {queryParamImage !== true && (
+        <div
+          className={`absolute inset-0 z-10 grid h-full w-full grid-cols-2 text-8xl transition-opacity duration-3000 ${showNavigation ? "opacity-100" : "pointer-events-none opacity-0"} [@media(max-aspect-ratio:3/4)]:text-5xl`}
+        >
+          {queryParamImage !== undefined ? (
+            <div className="col-span-2 flex items-center justify-center bg-red-950/40 text-3xl text-wrap">
+              the specified image does not exist
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-center bg-mauve-800/90">
+                previous
+              </div>
+              <div className="flex items-center justify-center bg-slate-900/90">
+                next
+              </div>
+            </>
+          )}
         </div>
-        <div className="flex items-center justify-center bg-slate-900/90">
-          next
-        </div>
-      </div>
+      )}
       <div className="m-8 [@media(max-aspect-ratio:3/4)]:m-0 [@media(max-aspect-ratio:3/4)]:max-w-[95vw]">
         <img
           alt="img"
