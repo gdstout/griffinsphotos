@@ -20,7 +20,7 @@ export default function GalleryAll({
         return (
           <div
             key={img.filename}
-            className={`flex min-w-0 items-center justify-center overflow-hidden border border-taupe-300 p-2 ${wideImages.has(img.filename) ? "col-span-2 col-start-1 aspect-2/1" : tallImages.has(img.filename) ? "row-span-2 aspect-auto h-[calc(100vw-2rem)] [@media(max-aspect-ratio:3/4)]:h-[calc(100vw-0.5rem)]" : "aspect-square"}`}
+            className={`flex min-w-0 items-center justify-center overflow-hidden border border-taupe-300 p-2 ${wideImages.has(img.filename) ? "col-span-2 col-start-1 aspect-2/1" : tallImages.has(img.filename) ? "row-span-2 aspect-auto h-[calc(100vw-2rem)] [@media(max-aspect-ratio:3/4)]:h-[calc(100vw-0.5rem)]" : "aspect-square"} [@media(max-aspect-ratio:3/4)]:p-1`}
           >
             <Link
               className="block h-full w-full"
