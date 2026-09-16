@@ -31,9 +31,12 @@ export default function GallerySingle({
   const autoAdvanceGeneration = useRef(0);
   const currentIndexRef = useRef(0);
   const mouseX = useRef<number | null>(null);
+  const imageInfoTimer = useRef<number | null>(null);
+  const imageInfoRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
   const [showAdvanceIndicator, setShowAdvanceIndicator] = useState(false);
+  const [showImageInfo, setShowImageInfo] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -42,6 +45,9 @@ export default function GallerySingle({
       }
       if (stationaryTimer.current !== null) {
         window.clearTimeout(stationaryTimer.current);
+      }
+      if (imageInfoTimer.current !== null) {
+        window.clearTimeout(imageInfoTimer.current);
       }
     };
   }, []);
@@ -99,6 +105,7 @@ export default function GallerySingle({
     currentIndexRef.current = targetIndex;
     setCurrentIndex(targetIndex);
     setCurrentImgUrl(targetUrl);
+    setShowImageInfo(false);
 
     if (reschedule) {
       scheduleAutoAdvance();
@@ -199,6 +206,19 @@ export default function GallerySingle({
     scheduleAutoAdvance();
   }
 
+  /**
+   * set a timer for one second until the image info shows
+   */
+  function scheduleImageInfo() {
+    if (imageInfoTimer.current !== null) {
+      window.clearTimeout(imageInfoTimer.current);
+    }
+
+    imageInfoTimer.current = window.setTimeout(() => {
+      setShowImageInfo(true);
+    }, 1000);
+  }
+
   return (
     <div
       ref={galleryRef}
@@ -240,13 +260,42 @@ export default function GallerySingle({
           )}
         </div>
       )}
-      <div className="m-8 [@media(max-aspect-ratio:3/4)]:m-0 [@media(max-aspect-ratio:3/4)]:max-w-[95vw]">
+      <div
+        ref={imageInfoRef}
+        className="relative m-8 overflow-hidden [@media(max-aspect-ratio:3/4)]:m-0 [@media(max-aspect-ratio:3/4)]:max-w-[95vw]"
+        onMouseEnter={() => {
+          scheduleImageInfo();
+        }}
+        onMouseLeave={() => {
+          if (imageInfoTimer.current !== null) {
+            window.clearTimeout(imageInfoTimer.current);
+            imageInfoTimer.current = null;
+          }
+          setShowImageInfo(false);
+        }}
+      >
         <img
           alt="img"
           className={`h-auto max-h-[80vh] w-auto max-w-full justify-self-end border border-taupe-300 object-contain p-1.5 [@media(max-aspect-ratio:3/4)]:p-1 ${loadedImageUrl === currentImgUrl ? "opacity-100" : "opacity-0"} [@media(max-aspect-ratio:3/4)]:col-span-1`}
           src={currentImgUrl}
-          onLoad={() => setLoadedImageUrl(currentImgUrl)}
+          onLoad={(event) => {
+            setLoadedImageUrl(currentImgUrl);
+
+            if (event.currentTarget.matches(":hover")) {
+              scheduleImageInfo();
+            }
+          }}
         />
+        <div
+          className={`pointer-events-none absolute inset-x-px bottom-px flex h-1/4 flex-col justify-end gap-1 bg-radial-[at_bottom_left] from-taupe-950/70 via-taupe-950/20 to-transparent mask-[linear-gradient(to_top,black_0%,black_10%,transparent_100%)] p-6 text-taupe-100 transition-opacity ${showImageInfo ? "opacity-100 duration-500" : "opacity-0 duration-0"}`}
+        >
+          <h2 className="text-xl font-bold text-taupe-300">
+            {metadata[currentIndex]?.title}
+          </h2>
+          <p className="text-taupe-300">
+            {metadata[currentIndex]?.description}
+          </p>
+        </div>
       </div>
     </div>
   );
