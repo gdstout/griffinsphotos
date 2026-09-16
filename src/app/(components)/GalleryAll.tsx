@@ -27,6 +27,9 @@ export default function GalleryAll({
               href={`/?image=${encodeURIComponent(img.filename)}`}
             >
               <img
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                }}
                 alt={img.filename}
                 src={img.urlInfo.url}
                 loading="lazy"

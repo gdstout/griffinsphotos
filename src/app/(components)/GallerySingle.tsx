@@ -285,6 +285,9 @@ export default function GallerySingle({
               scheduleImageInfo();
             }
           }}
+          onContextMenu={(e) => {
+            e.preventDefault();
+          }}
         />
         <div
           className={`pointer-events-none absolute inset-x-px bottom-px flex h-1/4 flex-col justify-end gap-1 bg-radial-[at_bottom_left] from-taupe-950/70 via-taupe-950/20 to-transparent mask-[linear-gradient(to_top,black_0%,black_10%,transparent_100%)] p-6 text-taupe-100 transition-opacity ${showImageInfo ? "opacity-100 duration-500" : "opacity-0 duration-0"}`}
