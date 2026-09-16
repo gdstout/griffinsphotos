@@ -9,7 +9,9 @@ export const metadata: Metadata = {
     title: "Griffin Stout Photography",
     description: "Film photography by Griffin Stout",
     type: "website",
+    images: ["/opengraph-image.png"],
   },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
