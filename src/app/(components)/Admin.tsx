@@ -13,14 +13,19 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const [selectedFilename, setSelectedFilename] = useState<string | null>(null);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [isAddingImage, setIsAddingImage] = useState(false);
+  const [newImageFile, setNewImageFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const selectedImage = images.find(
     (image) => image.filename === selectedFilename,
   );
 
-  function saveImage(event: React.FormEvent<HTMLFormElement>) {
+  async function saveImage(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!selectedImage) {
+    if (!selectedImage || isSaving) {
       return;
     }
 
@@ -28,26 +33,113 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
     const title = String(formData.get("title") ?? "");
     const description = String(formData.get("description") ?? "");
 
-    setImages((current) =>
-      current.map((image) =>
-        image.filename === selectedImage.filename
-          ? { ...image, title, description }
-          : image,
-      ),
-    );
-    setSelectedFilename(null);
+    setIsSaving(true);
+
+    try {
+      const response = await fetch(
+        `/api/admin/images/${encodeURIComponent(selectedImage.filename)}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ title, description }),
+        },
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error ?? "Failed to save image");
+      }
+
+      setImages((current) =>
+        current.map((image) =>
+          image.filename === selectedImage.filename
+            ? { ...image, title: result.title, description: result.description }
+            : image,
+        ),
+      );
+      setSelectedFilename(null);
+    } catch (error) {
+      window.alert(
+        error instanceof Error ? error.message : "Failed to save image",
+      );
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  function deleteImage() {
-    if (!selectedImage) {
+  async function deleteImage() {
+    if (!selectedImage || isDeleting) {
       return;
     }
 
-    setImages((current) =>
-      current.filter((image) => image.filename !== selectedImage.filename),
-    );
-    setSelectedFilename(null);
-    setIsConfirmingDelete(false);
+    setIsDeleting(true);
+
+    try {
+      const response = await fetch(
+        `/api/admin/images/${encodeURIComponent(selectedImage.filename)}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error ?? "Failed to delete image");
+      }
+
+      setImages((current) =>
+        current.filter((image) => image.filename !== selectedImage.filename),
+      );
+      setSelectedFilename(null);
+      setIsConfirmingDelete(false);
+    } catch (error) {
+      window.alert(
+        error instanceof Error ? error.message : "Failed to delete image",
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
+  async function addImage(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!newImageFile || isUploading) {
+      return;
+    }
+
+    setIsUploading(true);
+
+    const formData = new FormData(event.currentTarget);
+    formData.set("image", newImageFile);
+
+    try {
+      const response = await fetch("/api/admin/images", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error ?? "Failed to upload image");
+      }
+
+      window.location.reload();
+    } catch (error) {
+      setIsUploading(false);
+      console.error("Image upload failed:", error);
+      window.alert(
+        error instanceof Error ? error.message : "Failed to upload image",
+      );
+    }
   }
 
   return (
@@ -106,9 +198,10 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="border border-taupe-300 px-3 py-1 transition hover:bg-taupe-300 hover:text-taupe-950"
+                    disabled={isSaving || isDeleting}
+                    className="border border-taupe-300 px-3 py-1 transition hover:bg-taupe-300 hover:text-taupe-950 disabled:cursor-wait disabled:opacity-50"
                   >
-                    Save
+                    {isSaving ? "Saving..." : "Save"}
                   </button>
                   <button
                     type="button"
@@ -136,9 +229,10 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
                       <button
                         type="button"
                         onClick={deleteImage}
-                        className="border border-red-500 px-3 py-1 text-red-500 transition hover:bg-red-500 hover:text-taupe-950"
+                        disabled={isDeleting}
+                        className="border border-red-500 px-3 py-1 text-red-500 transition hover:bg-red-500 hover:text-taupe-950 disabled:cursor-wait disabled:opacity-50"
                       >
-                        Confirm Delete
+                        {isDeleting ? "Deleting..." : "Confirm Delete"}
                       </button>
                       <button
                         type="button"
@@ -155,6 +249,74 @@ export default function Admin({ metadata, metadataEnriched }: AdminProps) {
           </div>
         );
       })}
+      <div
+        className="relative box-border flex aspect-square min-h-0 min-w-0 cursor-pointer items-center justify-center overflow-hidden border border-taupe-300 p-1.5 [@media(max-aspect-ratio:3/4)]:p-1"
+        onClick={() => setIsAddingImage(true)}
+      >
+        {!isAddingImage ? (
+          "+ Add Image"
+        ) : (
+          <form
+            onSubmit={addImage}
+            onClick={(event) => event.stopPropagation()}
+            className="absolute inset-0 flex flex-col justify-center gap-3 bg-taupe-950/5 p-4"
+          >
+            {isUploading && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-taupe-950/90">
+                <span>Uploading...</span>
+              </div>
+            )}
+
+            <label className="flex flex-col gap-1 text-sm">
+              Image
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                required
+                onChange={(event) =>
+                  setNewImageFile(event.target.files?.[0] ?? null)
+                }
+                className="text-xs file:mr-3 file:cursor-pointer file:border file:border-taupe-300 file:bg-transparent file:px-3 file:py-1 file:text-xs file:text-inherit file:transition hover:file:bg-taupe-300 hover:file:text-taupe-950"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1 text-sm">
+              Rename File
+              <input
+                name="fileRename"
+                className="border border-taupe-300 bg-taupe-950/20 px-2 py-1 outline-none focus:border-taupe-100"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1 text-sm">
+              Title *
+              <input
+                name="title"
+                required
+                className="border border-taupe-300 bg-taupe-950/20 px-2 py-1 outline-none focus:border-taupe-100"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1 text-sm">
+              Description
+              <textarea
+                name="description"
+                rows={3}
+                className="resize-none border border-taupe-300 bg-taupe-950/20 px-2 py-1 outline-none focus:border-taupe-100"
+              />
+            </label>
+
+            <button
+              type="submit"
+              disabled={isUploading}
+              className="border border-taupe-300 px-3 py-1 transition hover:bg-taupe-300 hover:text-taupe-950 disabled:cursor-wait disabled:opacity-50"
+            >
+              {isUploading ? "Uploading..." : "Add"}
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }
