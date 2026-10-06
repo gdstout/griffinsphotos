@@ -317,23 +317,25 @@ export default function GallerySingle({
           </div>
         </div>
 
-        <button
-          type="button"
-          aria-label="Show image information"
-          title="Show image information"
-          onClick={(event) => {
-            event.stopPropagation();
-            showMobileImageInfo();
-          }}
-          className="hidden items-center justify-center p-2 text-taupe-300 hover:text-taupe-100 [@media(pointer:coarse)]:flex"
-        >
-          <span
-            aria-hidden="true"
-            className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-current font-serif text-xs leading-none font-bold"
+        {loadedImageUrl === currentImgUrl && (
+          <button
+            type="button"
+            aria-label="Show image information"
+            title="Show image information"
+            onClick={(event) => {
+              event.stopPropagation();
+              showMobileImageInfo();
+            }}
+            className="hidden items-center justify-center p-2 text-taupe-300 hover:text-taupe-100 [@media(pointer:coarse)]:flex"
           >
-            i
-          </span>
-        </button>
+            <span
+              aria-hidden="true"
+              className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-current font-serif text-xs leading-none font-bold"
+            >
+              i
+            </span>
+          </button>
+        )}
       </div>
     </div>
   );
