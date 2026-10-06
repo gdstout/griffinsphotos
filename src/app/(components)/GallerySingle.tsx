@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const STATIONARY_DELAY_MS = 500;
 const AUTO_ADVANCE_DELAY_MS = 7500;
+const MOBILE_INFO_DURATION_MS = 3000;
 
 interface GallerySingleProps {
   metadata: ImageMetadata[];
@@ -210,6 +211,11 @@ export default function GallerySingle({
    * set a timer for one second until the image info shows
    */
   function scheduleImageInfo() {
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      setShowImageInfo(false);
+      return;
+    }
+
     if (imageInfoTimer.current !== null) {
       window.clearTimeout(imageInfoTimer.current);
     }
@@ -217,6 +223,18 @@ export default function GallerySingle({
     imageInfoTimer.current = window.setTimeout(() => {
       setShowImageInfo(true);
     }, 1000);
+  }
+
+  function showMobileImageInfo() {
+    if (imageInfoTimer.current !== null) {
+      window.clearTimeout(imageInfoTimer.current);
+    }
+
+    setShowImageInfo(true);
+    imageInfoTimer.current = window.setTimeout(() => {
+      setShowImageInfo(false);
+      imageInfoTimer.current = null;
+    }, MOBILE_INFO_DURATION_MS);
   }
 
   return (
@@ -262,10 +280,8 @@ export default function GallerySingle({
       )}
       <div
         ref={imageInfoRef}
-        className="relative m-8 overflow-hidden [@media(max-aspect-ratio:3/4)]:m-0 [@media(max-aspect-ratio:3/4)]:max-w-[95vw]"
-        onMouseEnter={() => {
-          scheduleImageInfo();
-        }}
+        className="relative m-8 flex w-fit max-w-full flex-col items-start overflow-hidden [@media(max-aspect-ratio:3/4)]:m-0 [@media(max-aspect-ratio:3/4)]:max-w-[95vw]"
+        onMouseEnter={scheduleImageInfo}
         onMouseLeave={() => {
           if (imageInfoTimer.current !== null) {
             window.clearTimeout(imageInfoTimer.current);
@@ -274,31 +290,50 @@ export default function GallerySingle({
           setShowImageInfo(false);
         }}
       >
-        <img
-          alt="img"
-          className={`h-auto max-h-[80vh] w-auto max-w-full justify-self-end border-2 border-taupe-300 object-contain p-1.5 [@media(max-aspect-ratio:3/4)]:p-1 ${loadedImageUrl === currentImgUrl ? "opacity-100" : "opacity-0"} [@media(max-aspect-ratio:3/4)]:col-span-1`}
-          src={currentImgUrl}
-          onLoad={(event) => {
-            setLoadedImageUrl(currentImgUrl);
+        <div className="relative overflow-hidden">
+          <img
+            alt="img"
+            className={`block h-auto max-h-[80vh] w-auto max-w-full justify-self-end border-2 border-taupe-300 object-contain p-1.5 [@media(max-aspect-ratio:3/4)]:p-1 ${loadedImageUrl === currentImgUrl ? "opacity-100" : "opacity-0"} [@media(max-aspect-ratio:3/4)]:col-span-1`}
+            src={currentImgUrl}
+            onLoad={(event) => {
+              setLoadedImageUrl(currentImgUrl);
 
-            if (event.currentTarget.matches(":hover")) {
-              scheduleImageInfo();
-            }
-          }}
-          onContextMenu={(e) => {
-            e.preventDefault();
-          }}
-        />
-        <div
-          className={`pointer-events-none absolute inset-x-px bottom-px flex h-1/4 flex-col justify-end gap-1 bg-radial-[at_bottom_left] from-taupe-950/70 via-taupe-950/20 to-transparent mask-[linear-gradient(to_top,black_0%,black_10%,transparent_100%)] p-6 text-taupe-100 transition-opacity ${showImageInfo ? "opacity-100 duration-500" : "opacity-0 duration-0"}`}
-        >
-          <h2 className="text-xl font-bold text-taupe-300">
-            {metadata[currentIndex]?.title}
-          </h2>
-          <p className="text-taupe-300">
-            {metadata[currentIndex]?.description}
-          </p>
+              if (event.currentTarget.matches(":hover")) {
+                scheduleImageInfo();
+              }
+            }}
+            onContextMenu={(e) => e.preventDefault()}
+          />
+
+          <div
+            className={`pointer-events-none absolute inset-x-px bottom-px flex h-1/4 flex-col justify-end gap-1 bg-radial-[at_bottom_left] from-taupe-950/70 via-taupe-950/20 to-transparent mask-[linear-gradient(to_top,black_0%,black_10%,transparent_100%)] p-6 text-taupe-100 transition-opacity [@media(max-aspect-ratio:3/4)]:h-1/3 [@media(max-aspect-ratio:3/4)]:gap-0.5 [@media(max-aspect-ratio:3/4)]:p-3 ${showImageInfo ? "opacity-100 duration-500" : "opacity-0 duration-0"}`}
+          >
+            <h2 className="text-xl font-bold text-taupe-300 [@media(max-aspect-ratio:3/4)]:text-sm">
+              {metadata[currentIndex]?.title}
+            </h2>
+            <p className="text-taupe-300 [@media(max-aspect-ratio:3/4)]:text-xs">
+              {metadata[currentIndex]?.description}
+            </p>
+          </div>
         </div>
+
+        <button
+          type="button"
+          aria-label="Show image information"
+          title="Show image information"
+          onClick={(event) => {
+            event.stopPropagation();
+            showMobileImageInfo();
+          }}
+          className="hidden items-center justify-center p-2 text-taupe-300 hover:text-taupe-100 [@media(pointer:coarse)]:flex"
+        >
+          <span
+            aria-hidden="true"
+            className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-current font-serif text-xs leading-none font-bold"
+          >
+            i
+          </span>
+        </button>
       </div>
     </div>
   );
